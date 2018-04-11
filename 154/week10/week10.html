@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h2 id="week-10-output-devices"><strong><em>Week 10: Output Devices</em></strong></h2>
+<h3 id="the-assignment"><strong><em>The Assignment</em></strong></h3>
+<p>For this week assignment, we need to control at least one output device. I decided to use DC motor as my output device.</p>
+<h3 id="dc-motor"><strong><em>DC Motor</em></strong></h3>
+<p>I made a simple DC motor circuit that is based on Neil's <a href="http://academy.cba.mit.edu/classes/output_devices/H-bridge/hello.H-bridge.44.png">hello.H-bridge.44</a> board. I made almost the same design but with eagle cad as shown below:</p>
+<p align="center">
+<img src="dc1-s.JPG" />
+</p>
+<p align="center">
+<img src="dc1-b.JPG" />
+</p>
+<p>As seen from the above pictures, I added a diode that is connected to the regulator output and VCC of the Attiny44 because my colleagues faced an issue where the regulator is being burned because of overheat while programing the board as our Fab ISP programmer provide power to the boards to be programmed and the regulator is supposed to not get input power at its output pin. So the diode will prevent this issue.</p>
+<p align="center">
+<img src="dc-r.JPG" />
+<center>
+The DC motor board after fabricating it
+</center>
+</p>
+<p>The DC motor we used works with 12V and as any DC motor I tried before, its speed and power decrease with decreasing the voltage so normally we need analog output voltage to control the speed of the motor and we don't have that in the Attiny44. So here comes the <a href="https://learn.sparkfun.com/tutorials/pulse-width-modulation">PWM</a> (Puls Width Modulation) that can generate different voltage levels out of a fixed DC voltage by controlling the frequency of the output pin.</p>
+<p>Another important thing to consider is the direction control of the DC motor, as the spinning direction of the DC motor changes with changing the polarity of the motor terminals. To do this with software, an <a href="https://en.wikipedia.org/wiki/H_bridge">H-Bridge</a> is needed which helps in reversing the polarity of the motor. I used to use the <a href="http://www.ti.com/lit/ds/symlink/l293.pdf">L293d</a> H-Bridge with Arduino, but this time I used the (A4953)[http://fab.cba.mit.edu/classes/863.13/people/carney/p5/A4952-3-Datasheet.pdf] as it is the SMD type we have in the lab and is part of the FabLab inventory.</p>
+<p align="center">
+<img src="h-bridge.JPG" />
+<center>
+A4953 H-Bridge PINOUT
+</center>
+</p>
+<p>As seen from the above image that I got from the datasheet of the A4953, it has two control pins <code>IN1</code> &amp; <code>IN2</code> which are set as OUTPUTs as the motor direction will be as the following:</p>
+<ul>
+<li>Clockwise: <code>IN1 = HIGH</code> &amp; <code>IN2 = LOW</code></li>
+<li>Anti-Clockwise: <code>IN1 = LOW</code> &amp; <code>IN2 = HIGH</code></li>
+</ul>
+<p>For programing, I used Neil's <a href="http://academy.cba.mit.edu/classes/output_devices/DC/hello.H-bridge.44.DC.c">code</a> for the DC motor and modified it so the DC motor will spin only at one direction all the time, just for the sake of trying as it is based on software and I want to do a hardware PWM for my final project.</p>
+<p>I attached the code <a href="dc.c">here</a> and the below video shows the motor spinning:</p>
+<p>I attached the code <a href="dc.c">here</a> and the below video shows the motor spinning:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/N7U1vtwnPDI" frameborder="0" allowfullscreen>
+</iframe>
+</center>
+<h3 id="final-project-output-board"><strong><em>Final Project Output Board</em></strong></h3>
+<p>I made the following board that is the node board of my final project that controls one DC motor and one servo motor for each wheel:</p>
+<p align="center">
+<img src="node-s.JPG" />
+</p>
+<p align="center">
+<img src="node-b.JPG" />
+</p>
+<p align="center">
+<img src="node-r.jpg" />
+</p>
+<p>FabRover, will have 6 of these nodes, one for each wheel. It is meant to control the speed and the direction of each wheel as each wheel has two degrees of freedom.</p>
+<h4 id="servo"><strong><em>Servo</em></strong></h4>
+<p>At the beginning, I started with the servo. So I used <a href="http://academy.cba.mit.edu/classes/output_devices/index.html">Neils's servo motor code</a> to control the servo using hardware PWM. He used PIN A6 and I needed to use PIN A5 so I just did this <code>#define PWM_pin (1 &lt;&lt; PA5)</code> and expected it to work just fine but it did not! Then I went to the <a href="http://www.atmel.com/Images/Atmel-7701_Automotive-Microcontrollers-ATtiny24-44-84_Datasheet.pdf">datasheet</a> (page 57, 97, 98 &amp; 99) and found that I need to write to the <code>COM1B1</code> and <code>COM1B0</code> of the <code>TCCR1A</code> Timer/Counter1 Control Register A. So I changed the TCCR1A bits to be <code>TCCR1A = (1 &lt;&lt; COM1B1) | (0 &lt;&lt; COM1B0);</code> instead of <code>TCCR1A = (1 &lt;&lt; COM1A1) | (0 &lt;&lt; COM1A0);</code>. This is because Neil used <code>OCR1A</code> PWM output which is <code>PA6</code> and I needed to use <code>OCR1B</code> which is <code>PA5</code>. So I changed the settings of the <code>TCCR1A</code> register.</p>
+<p>And As per the <a href="http://www.electronicoscaldas.com/datasheet/MG996R_Tower-Pro.pdf">Tower Pro MG996R servo</a> datasheet which the servo I used, I need to generate a PWM signal with a frequency of 50 HZ, and because I used <code>Phase Correct PWM Mode</code> with <code>ICR1</code> as top value and the frequency in this mode is calculated as the following: f= fclok/(2xprescaler)<br />
+and with 20MHz the results will be 1250000 and to get 50 I need to use ICR1 with 25000 so 1250000/25000 = 50.</p>
+<p>Then the servo needs 1 ms, 1.5 ms and 2 ms PWM signals to go to 60, 0 and -60 degrees. I used the same values of OCR1A of Neil's servo example, but for OCR1B.</p>
+<p>The below image shows the setup I used to test the servo on one of the wheels of the FabRover:</p>
+<p align="center">
+<img src="3.JPG" />
+</p>
+<p>The below video shows the servo motor working:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/kVEku1P4qcI" frameborder="0" allowfullscreen>
+</iframe>
+</center>
+<p>As seen above, I used the oscilloscope to show the PWM signals in real time while controlling the servo.</p>
+<h4 id="dc-servo-together"><strong><em>DC &amp; Servo Together!</em></strong></h4>
+<p>After getting familiar with the hardware PWM modes of the attiny44, I decided to control the wheel servo and dc motor using 3 hardware channels as the following:</p>
+<ul>
+<li>Servo motor PWM channel</li>
+<li>Connected to <code>PA5</code></li>
+<li>Driven by <code>OC1B</code> PWM channel of Timer 1.</li>
+<li><p>ICR1 at top, Phase correct PWM mode.</p></li>
+<li>DC Motor Channel 1 &amp;2</li>
+<li>Connected to <code>PA7</code> &amp; <code>PB2</code></li>
+<li>Driven by <code>OC0A</code> &amp; <code>OC0B</code> PWM channels of Timer 0.</li>
+<li><p>0xFF at top, Fast PWM mode.</p></li>
+</ul>
+<p>So I started by configuring the Timer 1 and Timer 0 registers as the following:</p>
+<pre><code>// Servo Setup
+  // set up timer 1
+  //
+  TCCR1A = (1 &lt;&lt; COM1B1) | (0 &lt;&lt; COM1B0); // clear OC1B on compare match
+  TCCR1B = (0 &lt;&lt; CS12) | (1 &lt;&lt; CS11) | (0 &lt;&lt; CS10) | (1 &lt;&lt; WGM13); // prescaler /8, phase and frequency correct PWM, ICR1 TOP
+  ICR1 = 25000; // 20 ms frequency
+  // set PA5 as output
+  DDRA |= (1 &lt;&lt; PA5);
+  // intilize PA5 to 0
+  PORTA &amp;= ~(1 &lt;&lt; PA5);
+//-----------------------------------------------------------------------------------------------------------------
+  //  
+  // DC motor setup
+  // set up timer 0
+  //
+  // clear OC0A &amp; OC0B on compare match
+  TCCR0A = (1 &lt;&lt; COM0A1) | (0 &lt;&lt; COM0A0) | (1 &lt;&lt; COM0B1) | (0 &lt;&lt; COM0B0) | (1 &lt;&lt; WGM01) | (1 &lt;&lt; WGM00);
+  // prescaler /8, Fast PWM Mode, 0xFF Top
+  TCCR0B = (0 &lt;&lt; CS12) | (1 &lt;&lt; CS11) | (0 &lt;&lt; CS10) | (0 &lt;&lt; WGM02);
+  // intilize DC motor PINS to 0 (IN1 &amp; IN2)
+  DDRA |= (1 &lt;&lt; PA7);
+  PORTA &amp;= ~(1 &lt;&lt; PA7);
+  DDRB |= (1 &lt;&lt; PB2);
+  PORTB &amp;= ~(1 &lt;&lt; PB2);</code></pre>
+<p>Then I created 5 functions for controiling the speed and direction of the DC motor as well as the position of the servo as shown below:</p>
+<pre><code>// function difentions
+
+  void left (void) // left postion -60 degrees
+ {
+  // 1.5 ms PWM on time
+  //
+  OCR1B = 1250;
+
+  //
+ }
+  void mid (void) // mid postion 0 degree
+ {
+  // 1.5 ms PWM on time
+  //
+  OCR1B = 1875;
+
+  //
+ }
+  void right (void) // right position +60 degrees
+ {
+  //
+  // 2 ms PWM on time
+  //
+  OCR1B = 2500;
+  //
+ }
+
+ void dcc (int v) // turn DC motor Clockwise with a given speed
+ {
+ OCR0B = v;
+ PORTB &amp;= ~(1 &lt;&lt; PB2);
+ }
+
+ void dca (int v) // turn DC motor Anti-Clockwise with a given speed
+ {
+      OCR0A = v;
+      PORTA &amp;= ~(1 &lt;&lt; PA7);
+ }
+</code></pre>
+<p>With this I can control the DC motor speed and direction as well as the servo with hardware PWM so I can make them move in the same time independtly!!! All I have to do is to call these function inside the infinite while loop. The below videos shows controlling the wheel DC motor and servo for one and two wheel respectively.</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sjJATa7n2iU" frameborder="0" allowfullscreen>
+</iframe>
+</center>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/a0TyPQi151g" frameborder="0" allowfullscreen>
+</iframe>
+</center>
+<h3 id="this-weeks-files"><strong><em>This Week's Files</em></strong></h3>
+<ul>
+<li><a href="week10.tar.gz">Week Files</a></li>
+</ul>
+</body>
+</html>

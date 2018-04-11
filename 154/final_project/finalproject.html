@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h1 id="my-final-project-fab-rover"><strong><em>My Final Project : FAB-ROVER</em></strong></h1>
+<h2 id="anyaxes-retired"><strong><em>Anyaxes: Retired</em></strong></h2>
+<p>anyAxes is a modular mechatronics joints that can be attached to each other to form different form of multiple axes machines such as CNCs or robotic arm.</p>
+<p align="center">
+<img src="project.jpeg" />
+</p>
+<p align="center">
+<img src="project2.jpeg" />
+</p>
+<p>Each anyAxes joint consists of motor connected to one rotating actuator which in turns connected to a rotating end effector via a timing belt where another liner motion end effector (E) will be connected, on the other hand, a metallic end effector will be connected to the other side of the belt (F), the F end effector is always touch a graphite plate, this plate is used as potentiometer as its resistance is measured between one point and the F end effector using a voltage divider method.</p>
+<p>So the end result of the project will be a modular joints that can be connected in different ways, with live feedback, so the user will able to see the position of the end point effector live on his computer as I am planning to display these joints feedback readings using software GUI interface such as python or processing with forward and invers kinematics so the user does not need to worry about such complex programming and start designing machines on the go.</p>
+<p>The idea of using pencil graphite with a timing belt is to simulate the function of linear potentiometer and I will try to make all the parts from what I will learn during fabacademy.</p>
+<h3 id="update-changing-project."><strong>Update: Changing Project</strong>.</h3>
+<p>Due to the fact that my project was depending on linear analog feedback which is graphite, Fransisco suggested that analog is not reliable and I found that I can not shape graphite easily as it can not be molded, it is actually used as mold frequently, so I decided to drop this idea for now but I might do it after fabacademy. My Final Project changed to <strong>FAB-ROVER.</strong></p>
+<h2 id="fab-rover-introduction"><strong>FAB-ROVER: Introduction</strong></h2>
+<h1 id="fab-rover"><strong>FAB-ROVER</strong></h1>
+<p>Fab Rover is a Mars rover that is based on Rocker Bogie suspension system and meant to work in desert to collect scientific measurements. I want to make an open rover platform that can be customized easily and can be fabricated totally in the FabLab. The below images shows my first drafts of the design using Fusion360 software.</p>
+<p align="center">
+<img src="d1.JPG" />
+</p>
+<p align="center">
+<img src="d2.JPG" />
+</p>
+<p>The project will have a rocker bogie suspension system which is a suspension system that does not require springs at all and is used by NASA in their rovers. It consists of two main linkage which are the rocker and the bogie. The rocker is the longest linkage and directly connected to the body of the rover via a rotation joint. The other linkage is called the bogie and it consists of the two wheels and is linked to the rocker with rotation joint as well. The body is kept from moving via differential system.</p>
+<p>FabRover is meant to be an open source project that can be fabricated in the FabLab. Thus I tried to fabricate as much as I can using digital fabrication techniques. The frame of the rover is made using 12 mm laser cut acrylic while the wheels are made using 3D Printing. The electronics are based on attiny44 and are I2C and RS32 serial ready.</p>
+<h3 id="wheels-3d-design-and-3d-printing"><strong>Wheels: 3D Design and 3D Printing</strong></h3>
+<p>I was planning to make the wheels by 3D printing the rims and molding the tire treads into each rim. Below is the final design of the rim:</p>
+<div class="sketchfab-embed-wrapper">
+<iframe width="640" height="480" src="https://sketchfab.com/models/5fc6887b644b4783913db2bbdfb1105e/embed" frameborder="0" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" onmousewheel>
+</iframe>
+<center>
+<p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;">
+<a href="https://sketchfab.com/models/5fc6887b644b4783913db2bbdfb1105e?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Wheel Design6</a> by <a href="https://sketchfab.com/HashimNabil?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">HashimNabil</a> on <a href="https://sketchfab.com?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a>
+</p>
+</div>
+</center>
+<p>Then due to time limit as I changed my final project in almost the last two weeks of Fabacademy, I dropped the idea of molding and casting the wheels. So I just used the 3D printed rims as wheels as shown below:</p>
+<p align="center">
+<img src="wheel.JPG" />
+</p>
+<h3 id="frame-and-motors-mount-2d-design-laser-cutting"><strong>Frame and Motors Mount: 2D Design &amp; Laser Cutting</strong></h3>
+<p>After designing the wheel I designed the Frame using Topology Optimization feature in Fusion 360. I started by designing simple frame and I cut it with card boar as shown below:</p>
+<p align="center">
+<img src="test.JPG" />
+</p>
+<p>The idea was to determine the final dimensions of the frame. After modifying the frame dimensions and shape, I used Topology optimization of Fusion 360 software to decrease the weight of the design and The below images shows the design of the rocker and bogie joints after applying the topology optimization to them.</p>
+<p align="center">
+<img src="rs.JPG" />
+</p>
+<p align="center">
+<img src="bs.JPG" />
+</p>
+<p>Then I laser the with 12 MM acrylic with the below settings:</p>
+<p align="center">
+<img src="set.png" />
+</p>
+<p>I also designed a laser cut motors mount as shown below:</p>
+<p align="center">
+<img src="mount2.jpg" />
+</p>
+<p align="center">
+<img src="mount1.jpg" />
+</p>
+<p>Then we assembled it to the frame as shown below:</p>
+<p align="center">
+<img src="frame1.jpg" />
+</p>
+<p>We used 8 16 mm M3 screws and nuts to assemble the laser acrylic mount of the DC motor and then 3 10 mm M3 screws to mount the dc motor to the mounting case:</p>
+<p align="center">
+<img src="dcm1.JPG" />
+</p>
+<p align="center">
+<img src="dcm2.JPG" />
+</p>
+<h3 id="differential-design-3d-design-and-3d-printing-mechanical-design"><strong><em>Differential Design: 3D Design and 3D Printing, Mechanical Design</em></strong></h3>
+<p>I used Autodesk Inventor to design the bevel gears of FabRover differential as the assembly mode of Autotdesk Inventor has a design tool for bevel gears.</p>
+<p align="center">
+<img src="inventor.JPG" />
+</p>
+<center>
+<div class="sketchfab-embed-wrapper">
+<iframe width="640" height="480" src="https://sketchfab.com/models/523d4e1ab2c34487a2134aa7161870cc/embed" frameborder="0" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" onmousewheel>
+</iframe>
+<p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;">
+<a href="https://sketchfab.com/models/523d4e1ab2c34487a2134aa7161870cc?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Bevel Gears Inventor</a> by <a href="https://sketchfab.com/HashimNabil?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">HashimNabil</a> on <a href="https://sketchfab.com?utm_medium=embed&utm_source=website&utm_campain=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a>
+</p>
+</div>
+</center>
+<p>Then I printed them using Ultimaker 2 3D printer. I used 12 mm thread to mount the side gears while I mounted the main bevel gears to the body of the rover using a 12 mm screw and a bearing. The below image shows the differential system of FAB-ROVER:</p>
+<p align="center">
+<img src="diff2.JPG" />
+</p>
+<p>The below video shows the differential system being tested:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AWKjvehH8KM" frameborder="0" allowfullscreen>
+</iframe>
+</center>
+<h3 id="main-control-boards-electronic-design-and-fabrication-cnc-milling"><strong>Main control boards: Electronic Design and fabrication, CNC Milling</strong></h3>
+<p>I made 3 types of boards. The main board that has a bluetooth connection, serial connection and I2C connection. Below is the images of the main board:</p>
+<p align="center">
+<img src="main-r.jpg" />
+</p>
+<p>The second board is the motors board or what I call the nodes. Each nodes can control a DC motor and servo motor using hardware PWM channels of the attiny44.</p>
+<p align="center">
+<img src="node-r.jpg" />
+</p>
+<p>The documentation of the motors node board can be found at <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/week10/week10.html">week 10</a> while the documentation of the interface and networking of the boards can be found at <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/week16/week16.html">week16</a>.</p>
+<p>The third board is the input board which has an lDR and more can be found at my input devices <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/week13/week13.html">week</a>.</p>
+<p align="center">
+<img src="ldr-r.jpg" />
+</p>
+<h3 id="first-iteration"><strong><em>First iteration</em></strong></h3>
+<p>I would like to thank Mr Francisco for helping me out in assembling the first version of FabRover as it was pretty difficult to assemble it by myself. We assembled it on the top of two wooden chairs so we can test the differential system as shown in the below video:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YinD66RtSWY" frameborder="0" allowfullscreen>
+</iframe>
+<center>
+<p>Then we put it in the ground for the first time and we went into hysterical laughing as the wheels were bended so bad and the seen itself was funny given the fact that we took a lot of time assembling the rover and it was just before the presentation day! Well the below picture explains everything:</p>
+<p align="center">
+<img src="s.jpg" />
+</p>
+<p>So right at this moment I realized how important is to do multiple iterations of the project instead of wasting a lot of time in the design. After this first iteration I figured out the main reasons of this significant bending of the wheels which are:</p>
+<ul>
+<li>The rocker joint were connected to the differential system using bearing which is a design mistake I made as the rocker and bogie joints should be fixed to the thread of the differential system.</li>
+</ul>
+<h3 id="final-version"><strong><em>Final Version</em></strong></h3>
+<p>The below images shows the final version of the project.</p>
+<p align="center">
+<img src="f2.JPG" />
+</p>
+<p align="center">
+<img src="f2.JPG" />
+</p>
+<h3 id="fabrover-mobile-app"><strong><em>FabRover Mobile App</em></strong></h3>
+<p>I designed a simple android application and the documentation can be seen in [week 16]. Below a screenshot of the app:</p>
+<p align="center">
+<img src="app3.jpg" />
+</p>
+<p>.</p>
+<h3 id="conclusion"><strong><em>Conclusion</em></strong></h3>
+<p>I managed to finish the output (week 10), input (week13) and part of the app (week16). In the second iteration of the mechanical design the managed to reduce the bending significantly and I will eliminate it after fabacademy as I learned many things from iterative design. I did not manage to make the system fully work right now due to the time limit and due to the many problems I faced.</p>
+<p>I learned a lot from this project and the most important things I learned was itaritive design.</p>
+<h3 id="final-project-files"><strong><em>Final Project Files</em></strong></h3>
+<ul>
+<li><a href="fabrover.tar.gz">Final Project Files</a></li>
+<li><a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/presentation.png">Slide</a></li>
+<li><a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/presentation.mp4">Video</a></li>
+<li><a href="FabRover-Hashim.f3d">FabRover Fusion360 Files (wheel, differential, frame, motors mounts)</a></li>
+<li><a href="rocker.dxf">rocker-dxf</a></li>
+<li><a href="bogie.dxf">bogie-dxf</a></li>
+<li><a href="servo.dxf">servo mount -dxf</a></li>
+<li><a href="dc.dxf">dc motor mount</a></li>
+</ul>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />Fab Rover by Hashim Al Sakkaf is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+</body>
+</html>

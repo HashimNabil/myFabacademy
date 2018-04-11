@@ -1,0 +1,35 @@
+# This script automate the "Push" process to Fabacademy Archive
+# Done by Eng Hashim Nabile Al Sakkaf from FabLab UAE with help of Eng Francisco Sanchez from BeachLab
+if [ "$#" -gt 0 ]  # check for user comment
+then
+echo script to push to fablabuae repo
+cd ~/Desktop/fablabuae/students
+echo the folder size is:
+size= du -sh 154  # check the size of the directory that will be pushed
+read -p "file size is ok?" -n 1 -r  # ask the user to approve the size
+if [[  $REPLY =~ ^[Yy]$ ]]          # if "y or Y" then continue
+then
+  echo converting markdown to html
+  cd ~/Desktop/fablabuae/students/154
+  for (( i=1; i<=19; i++))
+  do
+  cd ~/Desktop/fablabuae/students/154/week$i
+  pandoc week$i.md -f markdown -t html -c base.css -s -o week$i.html  
+  done
+  echo pulling
+  git pull
+  echo Adding files
+  git add --all
+  echo committing
+  git commit -m "$*"
+  echo Pushing!!
+  git pull && git push
+  echo All set!
+else
+ echo change the size my friend
+fi
+else
+echo commit please my friend
+fi
+
+# Hashim Nabil AL Sakkaf, 2017

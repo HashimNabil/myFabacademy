@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h2 id="week-13-input-devices"><strong><em>Week 13: Input Devices</em></strong></h2>
+<h3 id="the-task"><strong><em>The Task</em></strong></h3>
+<p>To design a circuit board that is connected to an input device and read it and display the readings.</p>
+<h3 id="hacking-attempt"><strong><em>Hacking attempt!</em></strong></h3>
+<p>As my final project requires rotary feedback, I will need the rotary encoder to read the feedback of the motors. I started by disassembling an old printer's motor that is connected to a rotary encoder as shown below:</p>
+<p align="center">
+<img src="1.jpeg" />
+</p>
+<p align="center">
+<img src="2.jpeg" />
+</p>
+<p>While powering the circuit, I shorted the encoder circuit by mistake and the IR photodetector burned out! so I dropped this idea.</p>
+<h3 id="rotary-encoder-design"><strong><em>Rotary Encoder Design</em></strong></h3>
+<p>After my failed attempt, I decided to create the sensor my self specially that we have the main components required to create it. The rotary encoder consists of the encoded disk, the IR LED and the photo transistor.</p>
+<h4 id="encoder-disk"><strong><em>Encoder Disk</em></strong></h4>
+<p>I made the Encoded disk using <a href="https://code.google.com/archive/p/wheel-encoder-generator/">WheelEncoderGenerator</a> software which is shown below:</p>
+<p align="center">
+<img src="3.JPG" />
+</p>
+<h4 id="ir-led-and-photodarlington"><strong><em>IR LED and Photodarlington</em></strong></h4>
+<p>IR LED is Infra RED Light Emitting Diode that I dealt with before, I used it with IR Receiver (<a href="https://en.wikipedia.org/wiki/Photodiode">photo diode</a> or <a href="http://www.radio-electronics.com/info/data/semicond/phototransistor/photo_transistor.php">photo transistor</a>). However, the Photodarlington was new term to me so I looked it up in the internet and found it to be a darlington transistor having a phototransistor as input as per <a href="https://en.wiktionary.org/wiki/photodarlington">this</a> Wiktionary article. The <a href="htt%20ps://en.wikipedia.org/wiki/Darlington_transistor">darlington transistor</a> consists of two bipolar transistors connected in a way that the total current gain is the product of the gains of both transistors. The model I used is <a href="https://www.digikey.com/product-detail/en/tt-electronics-optek-technology/OP580DA/365-1481-1-ND/1853400">Silicon Photo Darlington in PLCC-2 Package OP580DA</a>.</p>
+<p align="center">
+<img src="Photodarilngton.JPG" />
+</p>
+<p>It has 2 pins which are the collector and the emitter as shown in the figure below:</p>
+<p align="center">
+<img src="Photodarilngton%20pinout.JPG" />
+</p>
+This photodarlington has 100% relative response at wavelength of 900 nm which is good for me as we have <a href="https://www.digikey.com/product-detail/en/everlight-electronics-co-ltd/HIR11-21C-L11-TR8/1080-1346-1-ND/2676080">IR LED</a> with maximum relative intensity at wavelength of 850 nm, and according to the photodarlington datasheet, the relative response will be almost 90% at 850 nm.
+<p align="center">
+<img src="IR%20respoonse.JPG" /> IR LED Spectral Distribution graph
+</p>
+<p align="center">
+<img src="Photodarilngton%20response.JPG" /> IR LED Spectral Distribution graph
+</p>
+<h3 id="pcb-design"><strong><em>PCB Design</em></strong></h3>
+<p>I used Neil's <a href="http://academy.cba.mit.edu/classes/input_devices/">hello.reflect.45</a> board as reference to my board design.</p>
+<p align="center">
+<img src="pcb.JPG" />
+</p>
+<p>However I designed two separated small PCBs for the IR LED and the photodarlington so I can mount them opposite to each other.</p>
+<p align="center">
+<img src="pad_pcb.JPG" />
+</p>
+<p>Then I milled them and connect the pads to the main board as shown below:</p>
+<p align="center">
+<img src="b1.jpeg" />
+</p>
+<p align="center">
+<img src="bf.jpeg" />
+</p>
+<h4 id="pinout"><strong><em>PinOut</em></strong></h4>
+<p align="center">
+<table>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Pin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IR LED</td>
+<td>PB3</td>
+</tr>
+<tr class="even">
+<td>Photo Darlington</td>
+<td>PB4</td>
+</tr>
+</tbody>
+</table>
+</p>
+<h3 id="programming"><strong><em>Programming</em></strong></h3>
+<h4 id="testing-the-ir-led"><strong><em>Testing the IR LED</em></strong></h4>
+<p>The first thing I did was testing the IR LED. I wrote a simple <a href="IR_Blink.c">IR_Blink</a> program to blink the IR for half second. I used my phone to check the results as we, humans can see IR light! The below video shows the IR LED blinking:</p>
+<p align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sSoYvxSseOc" frameborder="0" allowfullscreen>
+</iframe>
+</p>
+<h4 id="reading-the-photodarlington"><strong><em>Reading the Photodarlington</em></strong></h4>
+<p>As the photodarlington is outputting analog data, I will have to use the Aanalog to Digital Convertor (ADC) to read the values. I experienced that before with Arduino, analogRead() function but now I need to do it from scratch with C.</p>
+<p>As I am using Attiny45, I went to the <a href="http://www.atmel.com/images/atmel-2586-avr-8-bit-microcontroller-attiny25-attiny45-attiny85_datasheet.pdf">datasheet</a> to check for the ADC hardware. And it turned to be that is has 10 bit ADC that has its own clock for more accurate readings. The Analog Digital Convertor documentation starts from page 122 of the datasheet. I was reading it and comparing it with <a href="http://academy.cba.mit.edu/classes/input_devices/light/hello.light.45.c">Neil's Hello_light</a> code of the input devices to have a better idea about it.</p>
+<h5 id="conifguring-the-adc"><strong><em>Conifguring the ADC</em></strong></h5>
+<p>After reading Neil's code, <a href="http://librebooks.org/simply-avr/">Simply_AVR Book</a> , Attiny45 datasheet ADC convertor section, and watching this amazing <a href="https://www.youtube.com/watch?v=sVvDiACf3yE">tutorial</a>, the ADC can be configured as the following:</p>
+<p>1- <strong>Enabling the ADC</strong><br />
+<code>ADCSRA |= (1 &lt;&lt; ADEN);</code> We can configure that by writing to the <strong><em>ADC Control and Status Register A ADCSRA</em></strong>.</p>
+<p align="center">
+<img src="aa.png" />
+</p>
+<p>2- <strong>Setting up the prescaler</strong> <code>ADCSRA |= (1 &lt;&lt; ADPS2) | (1 &lt;&lt; ADPS1) | (1 &lt;&lt; ADPS0);</code><br />
+According to the datasheet, the ADC requires an input clock frequency between 50 kHz and 200 kHz to get maximum resolution. The lower the better.</p>
+<p align="center">
+<img src="ADC1.png" />
+</p>
+<p>The prescaler can be set by configuring the ADPS0, ADPS1 and ADPS2 bits of the ADCSRA register as shown in the below table:</p>
+<p align="center">
+<img src="adc8.png" />
+</p>
+<p>In my case, I will use 128 just as Neil's example as I also use the 8 MHz clock. so the ADC will be running at 8MHz/128 = 62.5 KHz.<br />
+3- <strong>Configuring the reference voltage.</strong> <code>ADMUX |= (0 &lt;&lt; REFS2) | (0 &lt;&lt; REFS1) | (0 &lt;&lt; REFS0)</code> this will set the reference voltage to VCC. The voltage reference can be external, VCC or internal with specific values and can be configured by writing to the <strong><em>ADC Multiplexer Selection Register ADMUX</em></strong> as shown in the table below:</p>
+<p align="center">
+<img src="adc3.png" />
+</p>
+<p>4- <strong>Configuring the presentation of the ADC conversion result in the ADC Data Register</strong>. According to the datasheet, if <code>1</code> is written to the ADLAR bit, the ADC result will be left adjusted, while writing <code>0</code> will make it right adjusted. Neil made it right adjusted by using <code>ADMUX |= (0 &lt;&lt; ADLAR)</code>. This is because the ADC in attiny45 is 10 bit and each register is 8 bit maximum so the ADC result takes 2 registers to fit the data which are ADCL and ADCH.</p>
+<p align="center">
+<img src="adc6.png" />
+</p>
+<p>5- <strong>Selecting the ADC channel.</strong><br />
+<code>ADMUX |= (0 &lt;&lt; MUX3) | (0 &lt;&lt; MUX2) | (1 &lt;&lt; MUX1) | (0 &lt;&lt; MUX0);</code> this will set the ADC channel to ADC3 or PB4 which is the pin that is connected to the photodarlington.</p>
+<p align="center">
+<img src="adc5.png" />
+</p>
+<p><strong><em>Note: All of the above configuration are done in the main() function</em></strong></p>
+<h5 id="using-the-adc"><strong><em>Using the ADC</em></strong></h5>
+<p>Using the ADC is much simpler than configuring them and of course it happens in the endless while loop.</p>
+<p>1- <strong>Starting the conversion process</strong> <code>ADCSRA |= (1 &lt;&lt; ADSC);</code> writing 1 to the ADC Start Conversion ADSC bit will start the ADC conversion process.</p>
+<p>2- <strong>Waiting for the conversion process to finish</strong> <code>while (ADCSRA &amp; (1 &lt;&lt; ADSC));</code></p>
+<p>3- <strong>Using the ADC Low and High Values ADCL &amp; ADCH</strong><br />
+As Fransisco said, the <code>#include &lt;avr/io.h&gt;</code> allow us to use the registers, pins and everything inside the avr microcontroller with names! so we can use the ADC results ADCL &amp; ADCH by just typing them. In Neil's example, he send them to the serial port. He started by the ADCL then the ADCH.</p>
+<h3 id="update-no-more-encoder">Update: No more Encoder!</h3>
+<p>After going this far, I understood how the ADC convector inside the attiny works, and as I changed the final project from anyAxes to FabRover, I don't need the encoder anymore and I think it will be a waste of time. So I made a new circuit board that has an LDR and supports I2C and serial connection. I also added LED to it to clear this week assignment. The LED will turn on when there is little or no light at the room. This time I used simple <code>ADC</code> command instead of <code>ADCH</code> and <code>ADCL</code> that Neil used. I also used the PA0 which is ADC0 channel and according to the datasheet, I don't need to set the ADMUX register as leaving its vlaues to zero means that the refereance volatge will be VCC and the ADC channel will be ADC0.</p>
+<p>I designed the main board using Eagle CAD. It is based on attiny44 and I did not use attiny45 because two ADC pins of the 3 ADC pins that it has are meant for the external crystal and the third ADC pin is meant for the SCK of the I2C pins so no more ADC pin to use and that is why I switched to attiny44. The below image shows the board design and the fabricated version:</p>
+<p align="center">
+<img src="board.png" />
+</p>
+<p align="center">
+<img src="main.JPG" />
+</p>
+<p>Then I used Kokopeli to design a breakout for the LDR so I can mount it at the top of the Fab Rover while all the electronics are mounted inside the Fab Rover.</p>
+<p align="center">
+<img src="ldr-cad.png" />
+</p>
+<p align="center">
+<img src="ldrb.JPG" />
+</p>
+<p>The setup I used for this week assignment can be shown below:</p>
+<p align="center">
+<img src="all.JPG" />
+</p>
+<p>The below video shows the board working:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/V_LCW3ic8yY" frameborder="0" allowfullscreen>
+</iframe>
+</center>
+<p>Finally, I am thinking of using the LDR as the input of my final project, so when the light level is low, all the motors should stop moving.</p>
+<h3 id="files-of-the-week"><strong><em>Files of the Week</em></strong></h3>
+<ul>
+<li><a href="encoder.sch" class="uri">encoder.sch</a></li>
+<li><a href="encoder.brd" class="uri">encoder.brd</a></li>
+<li><a href="pad.sch">IR and Photodarlington Pads shcematic</a></li>
+<li><a href="pad.brd">IR and Photodarlington Pads board</a></li>
+<li><a href="LDR.sch" class="uri">LDR.sch</a></li>
+<li><a href="LDR.brd" class="uri">LDR.brd</a></li>
+<li><a href="LDR.c" class="uri">LDR.c</a></li>
+</ul>
+</body>
+</html>

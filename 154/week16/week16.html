@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h2 id="week-16-interface-and-application-programming"><strong><em>Week 16: Interface and Application Programming</em></strong></h2>
+<h2 id="the-assignment"><strong><em>The Assignment</em></strong></h2>
+<p>This week assignment require us to make application that interfaces at least one input or output. I made a simple android app using <a href="http://ai2.appinventor.mit.edu/">MIT APP Inventor 2</a> that sends letter 'a' if button 1 is pressed and letter 'b' if button 2 is pressed. The app communicates to my <a href="">week 6</a> board via the <a href="https://www.olimex.com/Products/Components/RF/BLUETOOTH-SERIAL-HC-06/resources/hc06.pdf">HC-06</a> bluetooth to serial module.</p>
+<h3 id="hello-bluetooth"><strong><em>Hello Bluetooth!</em></strong></h3>
+<p>At the begining I made a simple application to get used with app after learning from this nice <a href="http://www.instructables.com/id/Course-on-MIT-App-Inventor-and-Arduino/">tutorial</a> by Magesh Jayakumar. So I made a simple anrdiod app that has 3 buttons which are:</p>
+<ul>
+<li><p><strong>Bluetooth</strong>: connect the bluetooth to the bluetooth to serial module that is connected to the board that has the LED.</p></li>
+<li><p><strong>On</strong>: when clicked sends character <code>a</code> to turn on the LED.</p></li>
+<li><p><strong>OFF</strong>: when clicked sends character <code>b</code> to turn on the LED.</p></li>
+</ul>
+<p align="center">
+<img src="app1.png" />
+</p>
+<p align="center">
+<img src="app2.png" />
+</p>
+<p>First I tested the app on my <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/week6/week6.html">week 6</a> board that has serial interface. I connected the HC-06 bluetooth module to the board using female wires as shown below:</p>
+<p align="center">
+<img src="blue1.JPG" />
+</p>
+<p>Then I edited <a href="http://academy.cba.mit.edu/classes/networking_communications/bus/hello.bus.45.c">Neil's serial bus code</a> and made it switch on the LED if letter 'a' is received and switch it off if letter 'b' is received. The below video shows the system working:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/S7oI9ZNj0Wo" frameborder="0" allowfullscreen>
+</iframe>
+<center>
+<p>With this I am ready to work on the final project mobile app!</p>
+<h3 id="fabrover-app"><strong><em>FabRover APP</em></strong></h3>
+<p>My final project <strong>FabRover</strong> has 7 different electronic boards or lets call them nodes. I put all the electronic design files of the nodes and brief explaination of each one at my <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/final_project/finalproject.html">final project</a> page. In general, the anrdoid app should control the movement of the FabRover wheels as well as gets the readings from the LDR board. I have 6 wheels to control but I will start with controling one wheel and getting the readings from the LDR. So I need to desing an app that do the following:</p>
+<ul>
+<li>Control the servo position.</li>
+<li>Control the DC motor speed and direction.</li>
+<li>Get the readings from the LDR and display it.</li>
+</ul>
+<p>After that, I tested the same code with my <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/final_project/finalproject.html">final project</a> node board that has an servo and DC motor to verify that the serial communication system is working properly. So I edited the Andriod App to have 6 buttons to control the servo and the DC motor as the following:</p>
+<ul>
+<li>Button 1 -&gt; Stop DC motor.</li>
+<li>Button 2 -&gt; Move wheel in clockwise direction</li>
+<li>Button 3 -&gt; Move Wheel in anti-clockwise direction.</li>
+<li>Button 4 -&gt; Move servo to 0 Degree</li>
+<li>Button 5 -&gt; Move Servo to 90 Degree</li>
+<li>Button 6 -&gt; Move servo to 180 Degree. 2 The below image shows a screenshot of the new application:</li>
+</ul>
+<p align="center">
+<img src="app3.png" />
+</p>
+<p>I also attached this short video that shows the wheel being controlled via the mobile app:</p>
+<p><a href="video2.mp4">Bluetooth Wheel Control</a></p>
+<p>With this I am almost done with the programming of my final project as I am only left with connecting the input device which is in my case the Light Depending Resistor (LDR) to this system and replicating it 5 more times!</p>
+<h3 id="files-of-the-week"><strong><em>Files of the Week</em></strong></h3>
+<ul>
+<li><a href="Bluetooth_LED.apk">Bluetooth_LED.APK</a></li>
+<li><a href="FabRoverx.aia">FabRover App MIT APP Inventor 2 files</a></li>
+<li><a href="fabrover.apk">Rover.APK</a></li>
+<li><a href="LED_blue.c">Bluetooth_LED LED</a></li>
+<li><a href="main.c">Main Board C Code</a></li>
+<li><a href="node.c">Node C Code</a></li>
+<li><a href="makefile">Make file for 20 MHz boards</a></li>
+</ul>
+</body>
+</html>

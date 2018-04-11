@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h2 id="week-11-machine-design">Week 11: Machine Design</h2>
+<p>The folder of the group machine assignment can be found <a href="http://archive.fabacademy.org/2017/fablabuae/machine.html">here</a>.</p>
+<h2 id="my-contribution">My Contribution</h2>
+<p>I was responsible for the programing of the machine and making the documentation of the group, as our machine is based on (reconfigurable stages) of Nadya Peek, we used 4 nodes of gestalt board. I started learning how to use them by following this nice <a href="http://fabacademy.org/archives/2015/doc/MachineMakingNotes.html">tutorial</a>. I connected the FabNet board along with one stepper motor connected and ran the single_node.py code. At the begining I was having error as the USB port was not connected as shown below:</p>
+<p align="center">
+<img src="1.png" />
+</p>
+<p>The problem was the USB port as it was not having the permesion to be used via the python code so I ran it with sudo and it worked just fine.</p>
+<p>I tested the codes and managed to make two motors work at a time.</p>
+<p>I used the example of the simple xy plotter of the htmaa folder inside the examples of pygestalt. I managed to make two motors move as shown in the below video:</p>
+<p><a href="video.mp4">Video of two nodes working</a></p>
+<p>Then we ran out of time due to the other tasks we have to do beside fabacademy and we used pygestalt to conrol only the extruder of the machine and the Arduion GRPL firmware to conrol the X,Y and Z axes of the machine.</p>
+<h3 id="files-of-the-week"><strong><em>Files of the Week</em></strong></h3>
+<ul>
+<li><a href="machine.tar.gz">Machine Programing</a></li>
+</ul>
+</body>
+</html>

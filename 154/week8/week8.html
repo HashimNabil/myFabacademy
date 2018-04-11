@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h1 id="week-8-embedded-programming"><strong><em>Week 8: Embedded Programming</em></strong></h1>
+<h3 id="programming-franciscos-board"><strong><em>Programming Francisco's Board</em></strong></h3>
+<p>Since I did not mill my design as I did not have the time to do it and we broke almost all our drilling bits, so I will be using Mr Fransisco Sanchez board which consists of ATTINY84 that is connected to LED and a Push Button. So the first thing I did was downloading the makefile from &quot;<a href="http://academy.cba.mit.edu/classes/input_devices/index.html">Input Devices</a>&quot; page, I used the makefile of the switch board and modified to input the C file I edited which is based on Mr Fransisco <a href="https://github.com/Academany/PreAcademy/blob/master/w4/code101.md">sketch</a> of prefabacademy.</p>
+<p>I edited the make file to be used with ATTINY44 instead of ATTINY45 as shown below:</p>
+<pre><code>PROJECT=switchLED
+SOURCES=$(PROJECT).c
+MMCU=attiny44
+F_CPU = 1000000
+
+CFLAGS=-mmcu=$(MMCU) -Wall -Os -DF_CPU=$(F_CPU)
+
+$(PROJECT).hex: $(PROJECT).out
+    avr-objcopy -O ihex $(PROJECT).out $(PROJECT).c.hex;\
+    avr-size --mcu=$(MMCU) --format=avr $(PROJECT).out
+
+$(PROJECT).out: $(SOURCES)
+    avr-gcc $(CFLAGS) -I./ -o $(PROJECT).out $(SOURCES)
+
+program-usbtiny: $(PROJECT).hex
+    avrdude -p t44 -P usb -c usbtiny -U flash:w:$(PROJECT).c.hex
+
+</code></pre>
+<p>The program I edited is as shown below:</p>
+<pre><code>#define F_CPU 1000000UL
+#include &lt;avr/io.h&gt;
+#define setbit(register, bit)   (register) |=  (1 &lt;&lt; (bit))
+#define clearbit(register, bit) (register) &amp;= ~(1 &lt;&lt; (bit))
+#define testbit(register, bit)  (register) &amp;   (1 &lt;&lt; (bit))
+
+// This program turns LED ON when the button is pressed
+
+int main (void)
+{
+
+  DDRA |= (1 &lt;&lt; PA7);
+  // set PB2 as output in DDRB
+
+  DDRA &amp;= ~(1 &lt;&lt; PA3);
+  // set PA3 as input in DDRA
+
+  PORTA = 0b00001000;
+  // SET PULL UP RESISTOR IN PA3
+
+ while(1) {
+   if (testbit(PINA,PA3))  
+
+   PORTA = 0b00000000;
+
+
+  else
+
+   PORTA = 0b10000000;
+
+        }
+}</code></pre>
+<p>This program supposed to switch on/off the LED based on the push button condition, the LED connected to A7 pin while the button connected to A3 pin.</p>
+<p>Then I tried to run the make file but I got this error &quot;make: *** No rule to make target 'switchLED.c', needed by 'switchLED.out'. Stop. &quot; Then I did some research and I found that I need to add the C extension to the C file I edited which is in this case switchLED, so I made it switchLED.c and it automatically converted to C file then I ran the make file and it uploaded the sketch without any issues.</p>
+<p>However the result is not good as the button is very sensitive to motion or any movement of the board and I did not have enough time to debug it and it turned out that this was a board of one of the former students of Fransisco and it was not working.</p>
+<p align="center">
+<img src="1.png" />
+</p>
+<p align="center">
+<img src="2.png" />
+</p>
+<h3 id="programming-my-board"><strong><em>Programming My Board</em></strong></h3>
+<h4 id="choosing-the-pins"><strong><em>Choosing the Pins</em></strong></h4>
+<p>After milling my <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/week4/week4.html">Week 4</a> I am able to program it now! My board is based on ATTINY44 microcontroller, so I went to the <a href="http://www.atmel.com/images/doc8006.pdf">datasheet</a> of the attiny44 to understand more about this microcontroller. As seen in the below picture that is taken from the datasheet, the attiny44 has 14 pins.</p>
+<p align="center">
+<img src="datasheet1.jpeg" />
+</p>
+<p>According to the datasheet, attiny44 has 1 VCC pin, 1 ground pin, 4 pins for PORTB which is 4 bit I/O port (PB0 to PB3), and 8 pins for PORTA which is 8 bits I/O port (PA0 to PA7).</p>
+<p>As I wanted my board to be as small as possible as it turned to be 23.2 mm by 24.3 mm only, I had to use the pins wisely. So similar to Neils Echo hello board, I used PB2 as output for the LED so the LED will be at left side of the board and the push button will be at the right side of the board to save as much space as possible. As PB0 and PB1 are used for the external resonator, 8 MHz for my case, and PB3 was used for the Reset, just like the original echo hello world board, I was left with PB2 or PA7 from the left side of the board, so I used PB2 as the output to control the LED.</p>
+<p>As my board contains button and LED, the push button is connected to PA3 as PA4 and PA5 are used for the ISP connector. I used the internal pull-up resistor of PA3 for the push button as PORTA pins has internal pull-up resistors and can be activated via the code as I will explain that in the code itself. This minimize the required components thus the board size as I don't need to add external resistor for the push button.</p>
+<center>
+<table>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Pin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>LED</td>
+<td>PB2</td>
+</tr>
+<tr class="even">
+<td>Push Button</td>
+<td>PA3</td>
+</tr>
+</tbody>
+</table>
+</p>
+</center>
+<h4 id="programming-the-board"><strong><em>Programming the Board</em></strong></h4>
+<p>The below picture is snapped from the datasheet of attiny44:</p>
+<p align="center">
+<img src="datasheet2.png" />
+</p>
+<p>As seen in the above picture, to activate the internal pull-up resistor of PA3 I needed to set it as input first and write 1 at PA3. I learned how to set bit and clear bit from the <a href="https://github.com/Academany/PreAcademy/blob/master/w4/code101.md">prefabacademy of Fransisco</a></p>
+<p>These are the required hardware configurations for the pins to be as inputs, outputs, high and low. I made the below table for configuring the pins in C language as Fransisco showed us:</p>
+<p align="center">
+<table>
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>|=</code></td>
+<td>set bit</td>
+</tr>
+<tr class="even">
+<td><code>&amp;= ~</code></td>
+<td>Clear bit</td>
+</tr>
+<tr class="odd">
+<td><code>DDRX |= (1 &lt;&lt; PXn);</code></td>
+<td>set the &quot;n&quot; pin in the X port as output, X can be port A or port B, n ranges from 0 to 7</td>
+</tr>
+<tr class="even">
+<td><code>DDRX &amp;= ~(1 &lt;&lt; PXn);</code></td>
+<td>set the &quot;n&quot; pin in the X port as input, X can be port A or port B, n ranges from 0 to 7</td>
+</tr>
+<tr class="odd">
+<td><code>PORTX = 0bnnnnnnnn;</code></td>
+<td>write n ( 0s &quot;Low&quot; or 1s &quot;HIGH&quot;) at the assigned pins in the assigned port (A or B)</td>
+</tr>
+<tr class="even">
+<td><code>PORTX &amp;= ~(1 &lt;&lt; PXn)</code></td>
+<td>set bit, write 0 &quot;Low&quot; at a specific pin n of a specific port X</td>
+</tr>
+<tr class="odd">
+<td><code>PORTB |= (1 &lt;&lt; PB2);</code></td>
+<td>clear bit, write 1 &quot;High&quot; at a specific pin n of a specific port X</td>
+</tr>
+<tr class="even">
+<td><code>PINA &amp;(1&lt;&lt; PA3)</code></td>
+<td>test bit if it is High</td>
+</tr>
+</tbody>
+</table>
+</p>
+<p>Then I wrote a program that simply siwtch on the LED if the button is pressed.</p>
+<pre><code>// Hashim Al Sakkaf
+// FabLab UAE @2017
+// Creative Commons Attribution 4.0 International License.
+
+#include &lt;avr/io.h&gt;
+
+
+int main (void)
+{
+
+  DDRB |= (1 &lt;&lt; PB2);
+  // set PB2 as output (LED)
+
+  DDRA &amp;= ~(1 &lt;&lt; PA3);
+  // set PA3 as input (Buttun)
+
+  PORTA |= (1 &lt;&lt; PA3);
+  // Activate Pull-up resistor at PA3
+
+ while(1) {
+
+if (PINA &amp;(1&lt;&lt; PA3))
+{
+//if button pressed
+
+  PORTB &amp;= ~(1 &lt;&lt; PB2);
+  // set PB2 low = switch on LED
+}
+
+else
+{  
+
+  PORTB |= (1 &lt;&lt; PB2);
+ // set PB2 high = switch off LED
+}
+
+        }
+}</code></pre>
+<p>The below video shows the board in action:</p>
+<p align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/UW-MYO757-k" frameborder="0" allowfullscreen>
+</iframe>
+</p>
+<h3 id="this-weeks-files"><strong><em>This Week's Files</em></strong></h3>
+<ul>
+<li><a href="switchLED.c">SwitchLED.c</a></li>
+<li><a href="makefile" class="uri">makefile</a></li>
+</ul>
+</body>
+</html>

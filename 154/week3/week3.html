@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h2 id="week-3-computer-controlled-cutting"><strong><em>Week 3: Computer-Controlled Cutting</em></strong></h2>
+<h3 id="vinyl-cutting"><strong><em>Vinyl Cutting</em></strong></h3>
+<p>I designed the first version of my final project logo using CoreldDraw software as I am very familiar with it and I don't have time this week to learn inkscape as I wanted to spend more time with other software such as antimony. So my logo is based on <a href="http://www.fontpalace.com/font-download/Harlow+Solid+Italic+Italic/">Harlow Solid Italic</a> and I replaced one of the &quot;x&quot; sticks to look like one axes of my anyAxes project as shown below:</p>
+<p align="center">
+<div class="figure">
+<img src="anyaxes%20logo-.png" />
+
+</div>
+</p>
+<p>However, this is the first draft and I will most likely change it on the future. I used the offline FabModules in Fransisco's laptop as he can drive the machine directly from FabModules. I exported the design as PNG image with 500 dpi resolution so fabmodules can trace it well. The picture below shows the logo processed in FabModules:</p>
+<p align="center">
+<div class="figure">
+<img src="fabmodules.png" />
+
+</div>
+</p>
+<p>We are having Roland GS-24 CAMM-1 vinyl cutter. It is very fast and very accurate vinyl cutter. It can work with rolls or even pieces of vinyl. So the first thing I did before cutting the design was adjusting the machine to cut from piece instead of cutting from roll. Then after cutting the design, the hard part begins! which is removing the un-needed parts from the design and of course sticking it! First I cut the piece that contain the design and removed the un-needed vinyl with my hand. as shown below:</p>
+<p align="center">
+<div class="figure">
+<img src="vx1.JPG" />
+
+</div>
+</p>
+<p>Then I used the cutting knife to remove the inside pieces of the vinyl. After that I used the application tape to take off the design and place it in my notebook as shown below:</p>
+<p align="center">
+<div class="figure">
+<img src="vx2.JPG" />
+
+</div>
+</p>
+<p>The final logo after sticking it to the notebook is shown below:</p>
+<p align="center">
+<div class="figure">
+<img src="vf.JPG" />
+
+</div>
+</p>
+<h3 id="laser-cutting"><strong><em>Laser Cutting</em></strong></h3>
+<p>We had to design a laser cut press fit kit. For this task, I used antimony which is a parametric software unlike any other software I used before. I installed it by following the instruction in its <a href="ttps://github.com/mkeeter/antimony/blob/develop/BUILDING.md">Github</a> page.</p>
+<p>The design is driven by mathmatical relationships between primitive shapes or what called &quot;Constructive Solide Geometry&quot;. It is hard at the begining because I did not try such software before but I really liked the end result, as it is easy to edit the design. All I have to do is to change one parameter that is of course has a direct and indirect realationship to all the parameters of the design.</p>
+<p>So I made a kit that consists of two pieces, the main piece which is a square with 4 slots as shown below:</p>
+<p align="center">
+<div class="figure">
+<img src="kit1.png" />
+
+</div>
+</p>
+<p>I started by a rectangle then I made the slots using a union of 2 triangles and a rectangle then I made a polar array of this some and finally I cut this sum from the main rectangle, it is a pure math!!!</p>
+<p align="center">
+<div class="figure">
+<img src="c.jpg" />
+
+</div>
+</p>
+<p>After clicking the export button, I made the resoultion to be 25 pixels/mm which is 635 pixel per inch (ppi) which is more than enough for fabmodules to process, however I did not need that as I used coreldraw.</p>
+<p>The second piece is a circular piece that can extends the posibilities of the design of the kit, as it helps in moving by 45 degrees in 4 extra directions.</p>
+<p align="center">
+<div class="figure">
+<img src="kit2.png" />
+
+</div>
+</p>
+<p>I used to make laser cut boxes and iterlock acrylic pieces together using holes and rectangular slots. But this time I used different method, which is to make 45 degree cuts at the end of each slot towards the end of the material. I learned this from the lecture as this helps in making the fiting operation easier spceially for tight fit cases.</p>
+<p>After designing the kit, I exported the design as png images then I used coreldraw to trace the image and cut the parts.</p>
+<p>I have used the main laser cutter we have whihc is <a href="https://www.ulsinc.com/products/platforms/vls660">Universal VLS 6.6</a>, it is CO2 laser and we have the 40 W laser tube version. It is a very good machine as it is very easy to operate and very sturdy as well. Even though it is only 40W it can cut acrylic up to 12 mm! To cut the parts, I changed the <code>stroke</code> color to <em>Red</em> and the stroke thickness to <code>hairline</code> as this color and this thickness is represent the vector cut settings in UCP software which is the CAM software of the machine. Then I clicked on 'ctrl+p' which is the print command, then <code>Prefrences</code> where I used the below settings:</p>
+<p align="center">
+<div class="figure">
+<img src="2.jpg" />
+
+</div>
+</p>
+<p align="center">
+<div class="figure">
+<img src="3.jpg" />
+
+</div>
+</p>
+<p>The parts came out nicely as the below image shows the two parts of the kit:</p>
+<p align="center">
+<div class="figure">
+<img src="f2.JPG" />
+
+</div>
+</p>
+<p>Then I made a simple construction using the kit as shown below:</p>
+<p align="center">
+<div class="figure">
+<img src="f.JPG" />
+
+</div>
+</p>
+<p>I noticed that the 45 degrees cuts at the end of the slot was really helpful in aligning the pieces and smoothing the fiting process.</p>
+<h3 id="files-of-the-week"><strong><em>Files of the Week</em></strong></h3>
+<ul>
+<li><a href="anyaxes.cdr">anyaxes logo cdr</a></li>
+<li><a href="anyaxes.dxf">anyaxes logo dxf</a></li>
+<li><a href="square.sb" class="uri">square.sb</a></li>
+<li><a href="circle.sb" class="uri">circle.sb</a></li>
+</ul>
+</body>
+</html>

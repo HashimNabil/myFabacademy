@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="mycss.css" type="text/css" />
+</head>
+<body>
+<h2 id="week-6-electronics-design"><strong><em>Week 6: Electronics Design</em></strong></h2>
+<p>This week project was about electronics design where we had to re-design the <a href="http://academy.cba.mit.edu/classes/embedded_programming/index.html#echo">echo-hello board</a> and add at least a LED and a button to it.</p>
+<p>I did two designs with two different software which are Eagle CAD that I am familiar with it, and <a href="https://www.mattkeeter.com/projects/kokopelli/">Kokopelli</a> as it is used by Neil as well as our Guru Fransisco Sanchez. I wanted to try creating PCB with just code that is why I did the second design using Kokopelli!</p>
+<h3 id="hello-board---eagle"><strong><em>Hello Board - Eagle</em></strong></h3>
+<p>Eagle became part of Autodesk recently and I have an Educational Autodesk account so I got myself the premium version of Eagle for Free!</p>
+<p>First of all, I downloaded the <a href="http://academy.cba.mit.edu/classes/electronics_design/index.html">Fab</a> library of Eagle to get most of the footprints of the SMD components that we have. I already had <a href="https://github.com/sparkfun/SparkFun-Eagle-Libraries">SparkFun</a> and <a href="https://github.com/adafruit/Adafruit-Eagle-Library">Adafruit</a> Eagle libraries which proved to be very useful for me in the past.</p>
+<p>Installing library in eagle is pretty straight forward as all I had to do is to download the library, copy it in lbr folder inside the Eagle folder, in my case in <strong>&quot;C:8.1.1&quot;</strong> then activating the libraries in the Eagle software itself by right clicking on the <strong><em>&quot;Libraries&quot;</em></strong> tab then selecting <strong><em>&quot;Use all&quot;</em></strong> as shown below:</p>
+<p align="center">
+<img src="libraries.JPG" /><br />
+Using Libraries in Eagle
+</p>
+<h4 id="components"><strong><em>components</em></strong></h4>
+<p>My board consists of the following components:</p>
+<ol style="list-style-type: decimal">
+<li>Attiny 44</li>
+<li>ISP Header</li>
+<li>10K ohm Resistor</li>
+<li>499 ohm Resistor<br />
+The <a href="https://www.digikey.com/products/en?keywords=160-1169-1-ND">LED</a> we used has a 30 mA continues current and the Attiny44 output high is 4.3V according to page 155 of the <a href="http://www.atmel.com/Images/Atmel-7701_Automotive-Microcontrollers-ATtiny24-44-84_Datasheet.pdf">datasheet</a>, so the required resistance will be <code>4.3/30m = 143 ohm</code> so I used the minimum resistor that is close to this value which is 499 ohm.</li>
+<li>8 MHz Resonator</li>
+<li>FTDI Connector</li>
+<li>1 uF Capacitor</li>
+<li>0.1 uF Capacitor</li>
+<li>Push Button (6 mm x 6 mm)</li>
+<li>LED 1206</li>
+</ol>
+<h4 id="schematic"><strong><em>Schematic</em></strong></h4>
+<p>The first step in PCB design with eagle is to create a new project then to create the schematic. The schematic is meant for inserting all the components footprints as well as making all the electrical connections between them, so I inserted all my components then I made the connection as shown below:</p>
+<p align="center">
+<img src="w6sch.png" /><br />
+Schematic
+</p>
+<h4 id="board-design"><strong><em>Board Design</em></strong></h4>
+<p>To start making the actual PCB design, I switched to the Board editor in eagle by clicking the &quot;Generate/Switch to Board&quot; tap as shown below:</p>
+<p align="center">
+<img src="pcb.png" /><br />
+PCB Design
+</p>
+<p>My board design is based on Neil's boards, as he puts the ISP just bellow the Attiny44 which saves a lot of space! I used 16 mill trace width to trace the components with 16 mill clearance in DRC settings because we use the 1/64 inch/ 0.4 mmm drill bit for milling the traces which equals to almost 0.016 inch (0.0157 to be exact) or 16 mill. Then I ran the Design Rule Check with to check for errors as shown below:</p>
+<p align="center">
+<img src="DRC%20Eagle.JPG" /><br />
+DRC clearance Rules
+</p>
+<p align="center">
+<img src="DRC%20Eagle%20Results.JPG" /><br />
+DRC Results
+</p>
+<p>As seed above, there are no DRC errors which means the board is ready for milling. To do so, I prepared the traces image as well as the outline image by first exporting the PCB png image from Eagle by hiding all the layers in the &quot;Layers Settings&quot; except Top, Pads and Dimensions layers as shown below:</p>
+<p align="center">
+<img src="layers.JPG" /><br />
+Layers Display Settings in Eagle
+</p>
+<p>Then I exported the png image from file&gt;export&gt;image with a 1000 dpi, window and monochrome (black and white) as shown below:</p>
+<p align="center">
+<img src="eagle%20image.JPG" /><br />
+Exporting Image of the Board
+</p>
+<p>I checked the window area so I can have a lot of white space around the PCB to be able to edit it with comfort in GIMP. After that, I used GIMP software to prepare the board for Fabmodules.org. I made a short video showing my workflow of preparing the PCB to be milled from Eagle to Fabmodules.org.</p>
+<p align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xP_CRNY5m34" frameborder="0" allowfullscreen>
+</iframe>
+</p>
+<p>My board dimensions are 24 x 25.19 mm which is very small I guess!</p>
+<h4 id="board-fabrication"><strong><em>Board Fabrication</em></strong></h4>
+<p>Similar to <a href="http://archive.fabacademy.org/archives/2017/fablabuae/students/154/week4/week4.html">week 4</a>, I used Roland SRM-20 CNC machine to mill my board. Even though all of our milling bits were broken! we managed to mill most of our PCBs with them! For my good luck, the bit I used was a bit better than the rest! so the board came our pretty good, almost as if it was milled with unbroken bit!</p>
+<p align="center">
+<img src="final_pcb1.JPG" /><br />
+The board after being milled
+</p>
+<p align="center">
+<img src="final_pcb2.JPG" /><br />
+A very small echo-hello world design!
+</p>
+<p>As you can see, the board is pretty small, it is only 23.2 mm by 24.3 mm as I tried to make it as small as possible!</p>
+<p>To avoid problems after soldering as re-soldering this small board where components must be soldered in specific order otherwise it will be pretty hard to solder, this a drawback of the small size, I put it under the microscope to check for short circuits as shown below:</p>
+<p align="center">
+<img src="check.JPG" /><br />
+The board under the microscope
+</p>
+<p>Then I prepared the components but unlike week 4, I organized them this time!</p>
+<p align="center">
+<img src="soldering1.JPG" /><br />
+Preparing the components
+</p>
+<p>You can see that the LED is not mentioned in the above list as I forgot to include it but I soldered it as it is the only output of my board!</p>
+<p>As my board size is very small I needed to solder in specific order to avoid difficulties while soldering so I started by soldering the Attiny44 then the Resonator followed by all the resistors, the LED and the capacitor, then the push button and the ISP headers and finally the FTDI connector.</p>
+<p align="center">
+<img src="soldering2.JPG" /><br />
+Soldering the Attiny44 first
+</p>
+<p align="center">
+<img src="soldering3.JPG" /><br />
+After soldering the Attiny44, all resistors, capacitors, resonator and the push button
+</p>
+<p align="center">
+<img src="soldering4.JPG" /><br />
+Side view of the final board
+</p>
+<p>As seen in the above picture, I used the de bouncing capacitor to hold the FTDI connectors then I added excessive amounts of solder in each pad of the FTDI connectors pads as well as the legs of the connector itself which resulted in holding the FTDI connector in almost 90 degree.</p>
+<p>The below pictures shows the final fabricated board!</p>
+<p align="center">
+<img src="final_board2.JPG" /><br />
+Final board
+</p>
+<p align="center">
+<img src="final_board.JPG" /><br />
+Hero shot of the final board!!!
+</p>
+<p>After finishing this board, I appreciated the advice of Mr Fransisco to use GIMP to edit the image exported from Eagle CAD as it was very useful software and the steps of preparing the images are pretty straight forward even though it was hard for me to get used to it at the beginning. I also liked the Fab footprints of the 1206 components from the Fab eagle library as passing the trace in between the components pads helps a lot in decreasing the size of the board!</p>
+<h3 id="hello-board---kokoopelli"><strong><em>Hello Board - Kokoopelli</em></strong></h3>
+<p>It is my first time trying PCB design using nothing but code! I thought it will be extermly hard at the beginning, but Fransisco gave us a small demo about it and it was somehow easy to use.</p>
+<p>I started by downloading <a href="http://academy.cba.mit.edu/classes/embedded_programming/hello.ftdi.44.cad">Neil's hello.ftdi.44.cad</a> then I modified it by adding a push button and LED. Modifying a ready board is much easier than creating one from the scratch. I also noticed that the file is self contained so all the classes are defined in the same code.</p>
+<p>The first thing I did was defining the board dimensions by changing the parameters found in this section of the code:</p>
+<pre><code>w = .016  
+width = 1.03  
+height = .93  
+mask = .004  
+x = 1  
+y = 1  
+z = -.005  
+d = .06  </code></pre>
+<p>The board dimensions are equivalent to 26.38 x 23.96 mm and is a bit bigger compared to the eagle board I designed before. I also figured out that I could made the Eagle board much smaller is I connected the 1 uF capacitor in the same configuration of the Kokoopelli board.</p>
+<p>Then I added the components, most of them were added with the original file such as the Attiny44, the FTDI headers, the ISP headers, the resonator, the 1 uF capacitor and the 10K ohm resistor. So I added a button, LED and its pull down resistor.</p>
+<p align="center">
+<img src="koko_components.png" /><br />
+
+<center>
+After adding the components
+</center>
+</p>
+<p>Then I made the connections using the following commands:</p>
+<p><code>pcb = wire(pcb,w,    IC1.pad[3],    XTAL1.pad[3])</code></p>
+<p>For example this command wire the resonator pad 3 to pin 3 (PB1) of the Attiny44. And while creating the wires, the horizontal line will be created then the vertical line will be created. In addition, we can insert as much intermediate points as we want as stated by Fransisco in this <a href="http://fabacademy.org/archives/content/tutorials/07_Electronics_Design/kokopelli/kokopelli_101.html">tutorial</a>. I used this feature to connect the VCC pin of the FTDI connector to the push button to decrease the size of the PCB.</p>
+<pre><code>pcb = wire(pcb,w,
+   J1.pad[2],
+   point(b1.pad[4].x-0.1,b1.pad[4].y+0.07,z),
+   point(J2.x+.08,J2.pad[3].y,z),
+   J2.pad[3])</code></pre>
+<p>The following picture shows the board after finishing the routing of the traces. I want also to state that the ISP, FTDI, crystal, 10K resistor and the 1uF capacitor were already routed, I just moved the FTDI to the right and routed the rest of the components such as the button and the LED and its pull down resistor.</p>
+<p align="center">
+<img src="koko_board.png" /><br />
+
+<center>
+Final board
+</center>
+</p>
+<p>After finishing the design, I exported the board image, traces and outline by commenting and uncommenting these functions in the top of the code:</p>
+<pre><code>output = &quot;traces, labels, and exterior&quot;
+#output = &quot;traces and exterior&quot;
+#output = &quot;interior&quot;
+#output = &quot;exterior&quot;
+#output = &quot;traces&quot;
+#output = &quot;holes&quot;
+#output = &quot;solder mask&quot;</code></pre>
+<p><code>output = &quot;traces, labels, and exterior&quot;</code> this command outputs the whole board with the traces, labels and exterior as shown in the previous picture.</p>
+<p><code>output = &quot;traces and exterior&quot;</code> this outputs the traces ready to be milled in <a href="fabmodules.org">Fabmodules</a> as shown below:</p>
+<p align="center">
+<img src="koko_traces.png" /><br />
+
+<center>
+Traces for fabmodules
+</center>
+</p>
+<p><code>output = &quot;exterior&quot;</code> this outputs the outline of the board as shown below:</p>
+<p align="center">
+<img src="koko_outline.png" /><br />
+
+<center>
+Outline of the board
+</center>
+</p>
+<p>Finally I exported the 2 images with a resolution of 40 mm/pixel which is equivalent to 1016 ppi which more than enough for fabmodules. I used this online <a href="http://www.endmemo.com/sconvert/pixel_mmppi.php">conventor</a> to convert from ppi to ppmm. I did not fabricate the Kokoopelli board as I had to fabricate only one board.</p>
+<p>In the end, I am glad that I tried Kokoopelli and I think I will work more with it after fabacademy. It is fast and easy to use and most of all cool! making PCB with code is something! However, it is not standard among the major community so I will be using eagle as well.</p>
+<h2 id="files-of-the-week"><strong><em>Files of the Week</em></strong></h2>
+<ul>
+<li><a href="Electronic%20Design.sch">Eagle Schematic</a></li>
+<li><a href="Electronic%20Design.brd">Eagle Board</a></li>
+<li><a href="Eagle%20Traces.png">Hello Board-Eagle Traces Image</a></li>
+<li><a href="Eagle%20Outline.png">Hello Board-Eagle Outline Image</a></li>
+<li><a href="koko_hello.cad">Hellow Board-kokopelli.CAD</a></li>
+<li><a href="koko_board.png">Hellow Board-kokopelli.Board</a></li>
+<li><a href="koko_traces.png">Hellow Board-kokopelli.Traces</a></li>
+<li><a href="koko_outline.png">Hellow Board-kokopelli.Outline</a></li>
+</ul>
+</body>
+</html>
